@@ -60,8 +60,15 @@ public class Scanner {
                         estado = 0;
                         tokens.add(t);
                         */
-
                     }
+                    else if(c=='.'){
+                        lexema = ".";
+                        Token t = new Token(TipoToken.DOT, lexema);
+                        tokens.add(t);
+                        estado = 0;
+                        lexema = "";
+                    }
+
                     break;
 
                 case 13:
@@ -139,7 +146,7 @@ public class Scanner {
                         lexema += c;
                     }
                     else if(Character.isDigit(c)){
-                        estado = 19;
+                        estado = 20;
                         lexema += c;
                     }
                     break;
