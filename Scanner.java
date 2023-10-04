@@ -63,8 +63,22 @@ public class Scanner {
                     }
                     else if(c=='.'){
                         
-                        //lexema = ".";
+                        lexema = ".";
                         Token t = new Token(TipoToken.DOT, lexema);
+                        tokens.add(t);
+                        estado = 0;
+                        lexema = "";
+                    }
+                    else if(c=='+'){
+                        lexema = "+";
+                        Token t = new Token(TipoToken.PLUS, lexema);
+                        tokens.add(t);
+                        estado = 0;
+                        lexema = "";
+                    }
+                    else if(c=='-'){
+                        lexema = "-";
+                        Token t = new Token(TipoToken.MINUS, lexema);
                         tokens.add(t);
                         estado = 0;
                         lexema = "";
