@@ -62,7 +62,8 @@ public class Scanner {
                         */
                     }
                     else if(c=='.'){
-                        lexema = ".";
+                        
+                        //lexema = ".";
                         Token t = new Token(TipoToken.DOT, lexema);
                         tokens.add(t);
                         estado = 0;
@@ -111,7 +112,7 @@ public class Scanner {
                     else{
                         Token t = new Token(TipoToken.NUMBER, lexema, Integer.valueOf(lexema));
                         tokens.add(t);
-                        estado = 22;
+                        estado = 0;
                         lexema = "";
                         i--;
                     }
@@ -134,7 +135,6 @@ public class Scanner {
                     else{
                         Token t = new Token(TipoToken.NUMBER, lexema, Double.valueOf(lexema));
                         tokens.add(t);
-
                         estado = 0;
                         lexema = "";
                         i--;
