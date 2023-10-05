@@ -32,14 +32,22 @@ public class Scanner {
         this.source = source + " ";
     }
 
+    /**
+     * @return
+     * @throws Exception
+     */
     public List<Token> scan() throws Exception {
         int estado = 0;
         String lexema = "";
+        String literal = "";
         char c;
+        int linea=0;
 
         for(int i=0; i<source.length(); i++){
             c = source.charAt(i);
-
+            if (c == '\n'){
+                linea++;
+            }
             switch (estado){
                 case 0:
                     if(Character.isLetter(c)){
@@ -59,7 +67,11 @@ public class Scanner {
                         lexema = "";
                         estado = 0;
                         tokens.add(t);
-                        */
+                        */      
+                    }
+                    else if(c=='\"'){
+                        estado = 24;
+                        lexema += c;
                     }
                     else if(c=='.'){
                         
@@ -182,9 +194,28 @@ public class Scanner {
                         lexema = "";
                         i--;
                     }
+                    break;
+                case 24:
+                    if(c == '\0'){
+                        System.out.println("Error");
+                        
+
+                    }else if(c == '\"'){
+                        lexema +=c;
+                        literal=lexema;    
+                        Token t = new Token(TipoToken.STRING, lexema, literal.replace('\"',' ').trim());
+                        tokens.add(t);
+                        estado = 0;
+                        lexema = "";
+                    }
+                    else{
+                        lexema+=c;
+                        estado=24;
+                    }
                     break;                
             }
         }
+        System.out.println("lineas totales" + linea);
         return tokens;
     }
 }
