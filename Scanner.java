@@ -69,7 +69,7 @@ public class Scanner {
                         tokens.add(t);
                         */      
                     }
-                    else if(c=='\"'){
+                    else if(c=='"'){
                         estado = 24;
                         lexema += c;
                     }
@@ -91,6 +91,48 @@ public class Scanner {
                     else if(c=='-'){
                         lexema = "-";
                         Token t = new Token(TipoToken.MINUS, lexema);
+                        tokens.add(t);
+                        estado = 0;
+                        lexema = "";
+                    }
+                    else if(c=='('){
+                        lexema = "(";
+                        Token t = new Token(TipoToken.LEFT_PAREN, lexema);
+                        tokens.add(t);
+                        estado = 0;
+                        lexema = "";
+                    }
+                    else if(c==')'){
+                        lexema = ")";
+                        Token t = new Token(TipoToken.RIGHT_PAREN, lexema);
+                        tokens.add(t);
+                        estado = 0;
+                        lexema = "";
+                    }
+                    else if(c=='{'){
+                        lexema = "{";
+                        Token t = new Token(TipoToken.LEFT_BRACE, lexema);
+                        tokens.add(t);
+                        estado = 0;
+                        lexema = "";
+                    }
+                    else if(c=='}'){
+                        lexema = "}";
+                        Token t = new Token(TipoToken.RIGHT_BRACE, lexema);
+                        tokens.add(t);
+                        estado = 0;
+                        lexema = "";
+                    }
+                    else if(c==','){
+                        lexema = ",";
+                        Token t = new Token(TipoToken.COMMA, lexema);
+                        tokens.add(t);
+                        estado = 0;
+                        lexema = "";
+                    }
+                    else if(c==';'){
+                        lexema = ";";
+                        Token t = new Token(TipoToken.SEMICOLON, lexema);
                         tokens.add(t);
                         estado = 0;
                         lexema = "";
@@ -196,14 +238,14 @@ public class Scanner {
                     }
                     break;
                 case 24:
-                    if(c == '\0'){
-                        System.out.println("Error");
-                        
-
-                    }else if(c == '\"'){
+                    if(c == '\n'){
+                        System.out.println("Error en la linea "+linea);
+                        System.exit(0);
+                    }
+                    else if(c == '"'){
                         lexema +=c;
-                        literal=lexema;    
-                        Token t = new Token(TipoToken.STRING, lexema, literal.replace('\"',' ').trim());
+                        literal=lexema.replace('"',' ').trim();    
+                        Token t = new Token(TipoToken.STRING, lexema, literal);
                         tokens.add(t);
                         estado = 0;
                         lexema = "";
