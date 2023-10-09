@@ -151,6 +151,14 @@ public class Scanner {
                         estado = 0;
                         lexema = "";
                     }
+                    else if(c=='['){
+                        Interprete.error(linea," Hay un simbolo que no se admite en el lenguaje ");
+                        i=source.length();
+                    }
+                    else if(c==']'){
+                        Interprete.error(linea," Hay un simbolo que no se admite en el lenguaje ");
+                        i=source.length();
+                    }
                     break;
 
                 case 1:
@@ -270,7 +278,7 @@ public class Scanner {
                         lexema += c;
                     }
                     else{
-                        Interprete.error(linea+1," Se esperaba un digito despues del punto ");
+                        Interprete.error(linea," Se esperaba un digito despues del punto ");
                         i=source.length();
                     }
                     break;
@@ -323,13 +331,13 @@ public class Scanner {
                 case 24:
                     if(c == '\"'){
                         lexema += c;
-                        Token t = new Token(TipoToken.STRING, lexema, lexema.replace('\"',' ').trim());
+                        Token t = new Token(TipoToken.STRING, lexema, lexema.replaceAll("\"",""));
                         tokens.add(t);
                         estado = 0;
                         lexema = "";
                     }
                     else if(c=='\n'){//Estado de error
-                        Interprete.error(linea+1," Se esperaba \" para terminar la cadena ");
+                        Interprete.error(linea," Se esperaba \" para terminar la cadena ");
                         i=source.length();
                     }
                     else{
