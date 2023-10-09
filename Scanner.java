@@ -151,13 +151,6 @@ public class Scanner {
                         estado = 0;
                         lexema = "";
                     }
-                    else if( c == '\n'|| c == ' ' || c == '\t'){
-                        estado=0;
-                    }
-                    else{
-                        Interprete.error(linea+1," Hay un simbolo que no se admite en el lenguaje "+c+" simbolo");
-                        i=source.length(); 
-                    }
                     break;
 
                 case 1:
