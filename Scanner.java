@@ -30,8 +30,12 @@ public class Scanner {
         int estado = 0;
         String lexema = "";
         char c;
+        int linea=0;
         for(int i=0; i<source.length(); i++){
             c = source.charAt(i);
+            if(c=='\n'){
+                linea++;
+            }
             switch (estado){
                 case 0:
                     if(Character.isLetter(c)){
@@ -52,6 +56,10 @@ public class Scanner {
                     }
                     else if (c=='!'){
                         estado = 10;
+                        lexema += c;
+                    }
+                    else if (c=='\"'){
+                        estado = 24;
                         lexema += c;
                     }
                     else if(Character.isDigit(c)){
@@ -110,12 +118,9 @@ public class Scanner {
                         estado = 0;
                         lexema = "";
                     }
-                    else if(c=='/'){
-                        lexema = "/";
-                        Token t = new Token(TipoToken.SLASH, lexema);
-                        tokens.add(t);
-                        estado = 0;
-                        lexema = "";
+                    else if(c=='/'){ //tiene que reconocer el slash para division y para comentarios
+                        lexema+=c;
+                        estado=26;
                     }
 
                    else if(c=='('){
@@ -264,6 +269,10 @@ public class Scanner {
                         estado = 17;
                         lexema += c;
                     }
+                    else{
+                        Interprete.error(linea+1," Se esperaba un digito despues del punto ");
+                        i=source.length();
+                    }
                     break;
                 case 17:
                     if(Character.isDigit(c)){
@@ -311,9 +320,68 @@ public class Scanner {
                         i--;
                     }
                     break;
+                case 24:
+                    if(c == '\"'){
+                        lexema += c;
+                        Token t = new Token(TipoToken.STRING, lexema, lexema.replace('\"',' ').trim());
+                        tokens.add(t);
+                        estado = 0;
+                        lexema = "";
+                    }
+                    else if(c=='\n'){//Estado de error
+                        Interprete.error(linea+1," Se esperaba \" para terminar la cadena ");
+                        i=source.length();
+                    }
+                    else{
+                        estado = 24;
+                        lexema += c;
+                    }
+                    break;
+                case 26:
+                    if (c=='*'){//se abre comentario de varias lineas
+                        lexema="";//olvidamos el lexema
+                        estado=27;
+                    }
+                    else if(c=='/'){
+                        lexema="";//olvidamos el lexema
+                        estado=30;
 
+                    }
+                    else{// si lee un slash , pero no encuentra nada mas, tiene que volver y generar el slash
+                        Token t = new Token(TipoToken.SLASH, lexema);
+                        tokens.add(t);
+                        estado = 0;
+                        i--;
+                        lexema = "";
+                    }
+                    break;
+                case 27:
+                    if (c=='*'){//se abre comentario de varias lineas
+                        estado=28;
+                    }
+                    else{
+                        estado=27;
+                    }
+                    break;
+                case 28:
+                    if (c=='*'){
+                        estado=28;
+                    }
+                    else if(c=='/'){
+                        estado=0;
+                    }
+                    else{
+                        estado=27;
+                    }
+                    break;
+                case 30:
+                    if(c=='\n'){
+                        estado=0;
+                    }
+                    else{
+                        estado=30;
+                    }
             }
-
         }
         return tokens;
     }
